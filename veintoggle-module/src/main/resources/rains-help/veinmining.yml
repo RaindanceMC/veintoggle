@@ -1,0 +1,84 @@
+id: veinmining
+title: Vein mining
+summary: Break one ore, get the whole vein — if you want it. Switch it on and off, and put a vein back with /ctrl-z.
+intro: |
+  One swing, one whole vein of ore. Wonderful for diamonds, slightly alarming near the thing you were <i>trying</i> to keep. Here is how to make it behave.
+icon: IRON_PICKAXE
+category: Items & enchantments
+order: 40
+module: veintoggle
+aliases: [vein, veinminer, veintoggle, ctrl-z, ctrlz, undo, veinundo, veins]
+keywords: [ore, ores, mining, vein, veins, pickaxe, axe, shovel, tree, switch, toggle, undo, restore]
+commands: [vein, ctrl-z]
+sections:
+  - question: What is vein mining?
+    title: What it is
+    text: |
+      Break one block of a vein — ore, a log, whatever the server's Veinminer accepts — and the connected rest comes down with it, as if you had broken every block yourself.
+      {if:veintoggle:require-enchantment}Your tool needs the <white>Veinminer</white> enchantment for that. Without it you simply break the one block, like everybody did before.{else}Any suitable tool will do; no special enchantment is asked for.{/if}
+      {if:!@plugin:Veinminer}<yellow>Veinminer itself is not installed on this server right now, so there is nothing to switch until it is.</yellow>{/if}
+  - question: How do I switch it on or off?
+    title: The switch
+    text: |
+      Type {run:/vein} — it flips vein mining for you and tells you which way it went. {cmd:/vein on}, {cmd:/vein off} and {cmd:/vein status} do what they say.
+      The switch is yours alone and is remembered. Until you have ever touched it, vein mining is {if:veintoggle:on-by-default}<green>on</green>{else}<yellow>off</yellow>{/if} for you — that is this server's default.
+  - question: What happens when it is off?
+    title: When it is off
+    text: |
+      Everything breaks one block at a time, exactly like ordinary mining. Nothing else changes: drops, tool damage and experience work as usual.
+      {if:veintoggle:say-when-held-back}If you try anyway, a short note appears in your action bar — at most once every few seconds, so it never turns into a wall of text.{/if}
+  - question: Why does only one block break?
+    title: Only one block?
+    text: |
+      Three usual suspects, in order of likelihood:
+      <white>1.</white> You switched it off — {run:/vein status} tells you.
+      {if:veintoggle:require-enchantment}<white>2.</white> Your tool has no <white>Veinminer</white> enchantment. It goes on a pickaxe, axe or shovel; you are told about it once in a while in the action bar.{/if}
+      <white>{if:veintoggle:require-enchantment}3.{else}2.{/if}</white> The block is not one Veinminer handles, or the land is protected so that you may not break it. Protection is checked for every single block of the vein.
+  - question: Can I put a vein back?
+    title: Undo with /ctrl-z
+    when: veintoggle:undo-within-seconds > 0
+    permission: rainsveintoggle.undo
+    text: |
+      Mined the wrong tree? Type {run:/ctrl-z} (or {cmd:/vein undo}). You have {setting:veintoggle:undo-within-seconds|seconds} after the vein came down, and only your <i>last</i> vein counts.
+      You must be in the same world and within 32 blocks of the vein. Wait a second after mining so it has finished falling — I will say so otherwise.
+      Blocks come back only where nothing else stands now, and only where you may build.
+  - question: What does an undo cost me?
+    title: What undo costs
+    when: veintoggle:undo-within-seconds > 0
+    permission: rainsveintoggle.undo
+    text: |
+      Nothing is free — a restored vein must not hand out a second set of diamonds. Whatever the vein dropped is taken back, in this order:
+      <white>1.</white> the vein's own items still lying around it;
+      <white>2.</white> your inventory;
+      <white>3.</white> the inventory of anybody who picked some up (they get a note);
+      <white>4.</white> for what they no longer have, money from their account at the server's buy price, as far as it reaches;
+      <white>5.</white> whatever is still missing — from <i>you</i>, but only if you agree.
+      A restored block drops the same again when broken, with no experience.
+  - question: What is that bill about?
+    title: The bill
+    when: veintoggle:undo-within-seconds > 0
+    permission: rainsveintoggle.undo
+    text: |
+      If after all that some items are still missing, you get a bill in chat with two buttons for a short while. {run:/ctrl-z pay} pays it from your account, and the rest of the vein goes back. {run:/ctrl-z cancel} declines: only the blocks whose drops are covered go back, the others stay mined.
+      Cannot pay it all? You pay what you can; the blocks that money does not cover stay mined. Until you answer, a second undo of yours waits.
+      Blocks that stayed mined are reported with the reason — something stands there now, you may not build there, or what they dropped is gone.
+  - question: Why is undo switched off?
+    title: Undo is off
+    when: "!veintoggle:undo-within-seconds"
+    text: |
+      On this server a vein cannot be taken back: undo is switched off. Look twice before you swing.
+  - question: Can I switch it for another player?
+    title: For someone else
+    permission: rainsveintoggle.others
+    text: |
+      Staff can: {cmd:/vein <player> [on|off|status]} switches it for somebody who is online — or reports how it stands. Without on/off it flips. That player is told what happened.
+  - question: What can staff change here?
+    title: Staff settings
+    permission: rainscore.settings
+    text: |
+      {run:/settings} has a page "Vein mining". Defaults today:
+      Default for those who never chose — {setting:veintoggle:on-by-default|onoff}.
+      Reminder when a vein is held back — {setting:veintoggle:say-when-held-back|onoff}.
+      Undo window — {setting:veintoggle:undo-within-seconds|seconds} (zero switches undo off).
+      Veinminer enchantment required — {setting:veintoggle:require-enchantment|onoff}; it is only enforced while the enchants module runs.
+      Everything else — which blocks, tools, sneaking — is Veinminer's own config; this module never touches it.
