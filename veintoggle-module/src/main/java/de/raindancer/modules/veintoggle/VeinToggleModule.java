@@ -50,7 +50,6 @@ public final class VeinToggleModule implements FlexModule {
                 context.settings(VeinToggleSettings.class, VeinToggleSettings.DEFAULTS);
         context.core().messages().defineFrom(VeinToggleModule.class.getResourceAsStream("messages.yml"),
                 context.chat().brand()::chatPrefix);
-        context.core().messages().seriousFrom(VeinToggleModule.class.getResourceAsStream("messages-serious.yml"));
         int registered = PermissionNodes.register(context.plugin().getServer());
         if (registered > 0) {
             context.log().info("{} permission(s) registered.", registered);
