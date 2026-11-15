@@ -23,13 +23,13 @@ public final class VeinToggleCommands {
                 ModuleCommand.of("vein", "Switches Veinminer on or off for you",
                                 new VeinCommand(VeinToggleCommands::require))
                         .aliased("veintoggle")
-                        .taking("(nothing) — switch it", "on | off | status", "undo — put your last vein back", "<player> [on|off] — for staff")
+                        .taking("(nothing): switch it", "on | off | status", "undo: put your last vein back", "<player> [on|off]: for staff")
                         .needing("rainsveintoggle.use"),
                 ModuleCommand.of("ctrl-z", "Puts your last vein back",
                                 new UndoCommand(VeinToggleCommands::require))
                         .aliased("veinundo")
-                        .taking("(nothing) — put your last vein back", "pay — pay for what nobody gave back",
-                                "cancel — leave the rest mined")
+                        .taking("(nothing): put your last vein back", "pay: pay for what nobody gave back",
+                                "cancel: leave the rest mined")
                         .needing("rainsveintoggle.undo"));
     }
 

@@ -86,7 +86,7 @@ public final class VeinToggleModule implements FlexModule {
                     settings.current().onByDefault() ? "on" : "off");
         } else {
             // Not an error: the switch is ready the moment Veinminer is added, and holds what people chose.
-            context.log().info("Vein toggle is up, but Veinminer is not installed — /vein does nothing until it is.");
+            context.log().info("Vein toggle is up, but Veinminer is not installed. /vein does nothing until it is.");
         }
     }
 
