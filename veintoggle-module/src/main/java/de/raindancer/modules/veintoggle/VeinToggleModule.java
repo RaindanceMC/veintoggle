@@ -35,7 +35,7 @@ public final class VeinToggleModule implements FlexModule {
     /** How long the undoer has to agree to pay for what nobody could give back. */
     private static final long BILL_SECONDS = 60;
 
-    private static final ModuleInfo INFO = ModuleInfo.of("veintoggle", "Vein Toggle", "0.6.1")
+    private static final ModuleInfo INFO = ModuleInfo.of("veintoggle", "Vein Toggle", "0.7.0")
             .describedAs("Switch Veinminer on or off for yourself with /vein, and undo a vein with /ctrl-z")
             .by("Raindancer118");
 
@@ -79,6 +79,14 @@ public final class VeinToggleModule implements FlexModule {
         context.listener(new VeinUndoListener(new VeinRule(), history, restored, System::currentTimeMillis,
                 server::getCurrentTick));
         VeinToggleCommands.ready(services);
+        // The switch is on /preferences (Core 2.103.0); /vein stays as the shortcut.
+        try {
+            de.raindancer.core.ui.preference.Preference veins = VeinTogglePreferences.veins(() -> services);
+            de.raindancer.core.ui.preference.Preferences.offer(context.plugin(), veins);
+            context.closeWith(() -> de.raindancer.core.ui.preference.Preferences.withdraw(veins));
+        } catch (LinkageError olderCore) {
+            context.log().info("RainsCore is older than 2.103.0: vein mining is not on /preferences.");
+        }
 
         if (services.veinminerInstalled()) {
             context.log().info("Vein toggle is up: Veinminer is {} for anybody who has not chosen.",
