@@ -20,7 +20,6 @@ public final class UndoNotices implements VeinUndoService.Notices {
             return;
         }
         if (outcome.restored() == total) {
-            messages.send(undoer, "veintoggle.undo-done");
             return;
         }
         if (outcome.restored() == 0) {
